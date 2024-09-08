@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: aqua;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .farmer-details {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffedb6;
+            margin-bottom: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        
+        .farmer-details h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        
+        .farmer-details p {
+            margin: 5px 0;
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #10ea5c;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .taskmanager {
+            align-items: center;
+            padding: 10px;
+            width: 100;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: rgb(70, 139, 200);
+            justify-content: center;
+            border-radius: 20px;
+        }
+        
+        #titel {
+            background-color: #35debf;
+            border-radius: 20px;
+            color: blueviolet;
+            text-shadow: #e61717;
+            font-size: 45px;
+            padding: 10px;
+        }
+        
+        .task-input {
+            display: flex;
+            background-color: aquamarine;
+            justify-content: space-between;
+            border-radius: 30px;
+            padding: 10px;
+            gap: 10px;
+        }
+        
+        .task-input input {
+            border-radius: 20px;
+            width: 22%;
+            padding: 10px;
+            font-size: 16px;
+            flex-grow: 1;
+        }
+        
+        #add-task {
+            border-radius: 30px;
+            background-color: rgb(248, 42, 172);
+            border-width: 8px solid black;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        li {
+            background: #c20cf0;
+            margin: 10px 0;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 5px;
+        }
+        
+        li.completed {
+            text-decoration: line-through;
+            color: rgb(249, 179, 193);
+        }
+        
+        li button {
+            background: #f68c8c;
+            color: rgb(234, 255, 0);
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        li button:hover {
+            background: rgb(234, 255, 0);
+            color: #f68c8c;
+        }
+        
+        li button.edit {
+            background: #0000ff;
+            margin-right: 5px;
+        }
+        
+        li button.edit:hover {
+            background: #f68c8c;
+            color: #0000ff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="farmer-details">
+        <h2>Farmer Information</h2>
+        <p>Name: <span id="farmer-name">Raj Kumar</span></p>
+        <p>Location: <span id="farmer-location">Dhareswar, Gujrat</span></p>
+        <p>Contact: <span id="farmer-contact">+91 456** **165</span></p>
+    </div>
+
+    <div class="container">
+        <div class="taskmanager">
+            <div id="titel">
+                Item to sell
+            </div>
+        </div>
+        <div class="task-input">
+            <input type="text" id="task-name" placeholder="Item name">
+            <input type="datetime-local" id="task-date">
+            <input type="number" id="task-price" placeholder="₹ price/kg" min="0" step="0.01">
+            <input type="number" id="task-quantity" placeholder="Quantity (kg)" min="0" step="0.01">
+            <button id="add-task">Add item</button>
+        </div>
+        <div id="tasks">
+            <p id="pending-tasks">
+                You have <span class="count-value">0</span> item(s) to sell.
+            </p>
+        </div>
+        <ol id="task-list"></ol>
+    </div>
+
+    <script src="farmer.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const taskNameInput = document.getElementById('task-name');
+            const taskDateInput = document.getElementById('task-date');
+            const taskPriceInput = document.getElementById('task-price');
+            const taskQuantityInput = document.getElementById('task-quantity');
+            const addTaskButton = document.getElementById('add-task');
+            const taskList = document.getElementById('task-list');
+            const countValue = document.querySelector(".count-value");
+            let taskCount = 0;
+
+            const displayCount = (taskCount) => {
+                countValue.innerText = taskCount;
+            };
+
+            addTaskButton.addEventListener('click', addTask);
+
+            function addTask() {
+                const taskName = taskNameInput.value.trim();
+                const taskDate = taskDateInput.value;
+                const taskPrice = taskPriceInput.value.trim();
+                const taskQuantity = taskQuantityInput.value.trim();
+
+                if (taskName === '' || taskDate === '' || taskPrice === '' || taskQuantity === '') {
+                    alert('Please enter task name, date, price, and quantity.');
+                    return;
+                }
+
+                const taskItem = document.createElement('li');
+                const taskText = document.createElement('span');
+                taskText.textContent = `${taskName} - ${new Date(taskDate).toLocaleString()} - ₹${taskPrice}/kg - ${taskQuantity} kg`;
+                taskItem.appendChild(taskText);
+                taskCount += 1;
+                displayCount(taskCount);
+
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.classList.add('edit');
+                editButton.addEventListener('click', () => editTask(taskItem, taskText, taskName, taskDate, taskPrice, taskQuantity));
+                taskItem.appendChild(editButton);
+
+                const completeButton = document.createElement('button');
+                completeButton.textContent = 'Sold';
+                completeButton.addEventListener('click', () => taskItem.classList.toggle('completed'));
+                taskItem.appendChild(completeButton);
+                let flag = 1;
+                completeButton.onclick = () => {
+                    if (flag == 1) {
+                        taskCount -= 1;
+                        flag -= 1;
+                    } else {
+                        taskCount += 1;
+                        flag += 1;
+                    }
+                    displayCount(taskCount);
+                };
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => taskItem.remove());
+                taskItem.appendChild(deleteButton);
+                deleteButton.onclick = () => {
+                    if (flag != 1) {
+
+                    } else {
+                        taskCount -= 1;
+                    }
+                    displayCount(taskCount);
+                };
+
+                taskList.appendChild(taskItem);
+
+                taskNameInput.value = '';
+                taskDateInput.value = '';
+                taskPriceInput.value = '';
+                taskQuantityInput.value = '';
+            }
+
+            function editTask(taskItem, taskText, oldName, oldDate, oldPrice, oldQuantity) {
+                const newTaskName = prompt('Edit task name:', oldName);
+                const newTaskDate = prompt('Edit task date and time:', oldDate);
+                const newTaskPrice = prompt('Edit task price per kg:', oldPrice);
+                const newTaskQuantity = prompt('Edit total quantity (kg):', oldQuantity);
+
+                if (newTaskName && newTaskDate && newTaskPrice && newTaskQuantity) {
+                    taskText.textContent = `${newTaskName} - ${new Date(newTaskDate).toLocaleString()} - ₹${newTaskPrice}/kg - ${newTaskQuantity} kg`;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

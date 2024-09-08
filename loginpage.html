@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 180vh;
+            margin: 0;
+            background-color: #f2f2f2;
+        }
+        
+        .container {
+            width: 400px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: left;
+        }
+        
+        .logo {
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+        
+        .header {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .input-field {
+            width: 95%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #888;
+            border-radius: 3px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 8px;
+            background-color: #cef445;
+            border: 1px solid #e7d353;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .info-text {
+            font-size: 12px;
+            color: #555;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .footer {
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+        }
+        
+        .footer a {
+            color: #0066c0;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .country-code {
+            width: 30%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #888;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        
+        .mobile-input {
+            width: 65%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #888;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        
+        .otp {
+            margin-top: 20px;
+        }
+        
+        .checkbox-container {
+            text-align: left;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .address-field {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #888;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form id="accountForm">
+            <img src="logo.png" alt="" class="logo" width="100">
+            <div class="header">Create Account</div>
+
+            <label for="name">Your name</label>
+            <input type="text" id="name" name="name" class="input-field" placeholder="First and last name">
+
+            <label for="aadhar">Your Aadhar number</label>
+            <input type="text" id="aadhar" name="aadhar" class="input-field" placeholder="0000 0000 0000">
+
+            <label for="mobile">Mobile number</label>
+            <div>
+                <select id="country-code" class="country-code" name="countryCode">
+                    <option value="+91">IN +91</option>
+                </select>
+                <input type="text" id="mobile" name="mobile" class="mobile-input" placeholder="Mobile number">
+            </div>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="input-field" placeholder="At least 6 characters">
+
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" class="address-field" placeholder="Street address, P.O. box, etc.">
+
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" class="address-field" placeholder="City">
+
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" class="address-field" placeholder="State">
+
+            <label for="zip">Pin Code</label>
+            <input type="text" id="zip" name="zip" class="address-field" placeholder="Pin Code">
+
+            <button class="btn">Verify mobile number</button>
+
+            <div class="otp">
+                <label for="otp">OTP</label>
+                <input type="text" id="otp" class="input-field" placeholder="Enter OTP">
+            </div>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="terms-conditions" name="terms-conditions">
+                <label for="terms-conditions">I accept the <a href="#">terms and conditions</a></label>
+            </div>
+            <button type="button" class="btn" onclick="window.location.href='index.html'">Continue</button>
+
+            <div class="footer">
+                <p>Already have an account? <a href="index.html">Sign in</a></p>
+                <p>By creating an account or logging in, you agree to Company's <a href="#">Conditions of Use</a> and <a href="#">Privacy Policy</a>.</p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function generateExcel() {
+            const name = document.getElementById('name').value;
+            const aadhar = document.getElementById('aadhar').value;
+            const mobile = document.getElementById('mobile').value;
+            const password = document.getElementById('password').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const zip = document.getElementById('zip').value;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #00bbff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        #items-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1200px;
+        }
+        
+        .farmer-details {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffedb6;
+            margin-bottom: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        
+        .farmer-details h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        
+        .farmer-details p {
+            margin: 5px 0;
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+            flex-direction: column;
+        }
+        
+        .item-info {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .item {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .prices {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        
+        .prices li {
+            font-size: 18px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .prices li span {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-container input {
+            width: 100%;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .add-item-container {
+            margin-bottom: 20px;
+        }
+        
+        .add-item-container input,
+        .add-item-container button {
+            margin-right: 10px;
+            background-color: #faef50;
+            border-radius: 5px;
+            padding: 8px 15px;
+        }
+        
+        .add-item-container button:hover {
+            margin-right: 10px;
+            background-color: #99f635;
+            border-radius: 5px;
+            padding: 8px 15px;
+        }
+        
+        .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #31f4bd;
+            color: #0c4564;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        
+        .remove-btn:hover {
+            background-color: #d55244;
+            color: #ebf5fa;
+        }
+        
+        .total-container,
+        .purchased-items {
+            background-color: #c4f599;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .purchased-items ul {
+            text-align: left;
+            padding-left: 20px;
+            color: blue;
+        }
+        
+        .paybtn {
+            background-color: #d55244;
+            color: #ebf5fa;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        
+        .paybtn:hover {
+            background-color: #4ddab2;
+            color: #1b658a;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="farmer-details">
+        <h2>Buyer Information</h2>
+        <p>Name: <span id="farmer-name">Ramcharan Roy</span></p>
+        <p>Location: <span id="farmer-location">Dhareswar, Gujrat</span></p>
+        <p>Contact: <span id="farmer-contact">+91 46*** **75</span></p>
+    </div>
+
+    <div class="add-item-container">
+        <input type="text" id="item-name" placeholder="Item Name">
+        <button id="add-item">Add Item</button>
+    </div>
+    <div id="items-container"></div>
+    <div class="total-container">
+        Total Cost: ₹<span id="total-cost">0.00</span>
+    </div>
+    <div class="purchased-items">
+        <h2>Purchased Items:</h2>
+        <ul id="purchased-items-list">
+        </ul>
+    </div>
+    <button class="paybtn" onclick="window.location.href='payment.html'">Payment</button>
+</body>
+<script>
+    function getRandomPrices(count) {
+        const prices = [];
+        for (let i = 0; i < count; i++) {
+            prices.push((Math.random() * (50 - 10) + 10).toFixed(2));
+        }
+        return prices;
+    }
+
+    function createBox(itemName) {
+        const container = document.getElementById('items-container');
+
+        const boxId = `box${container.children.length + 1}`;
+        const box = document.createElement('div');
+        box.classList.add('container');
+        box.id = boxId;
+
+        const basePrices = getRandomPrices(4);
+
+        box.innerHTML = `
+            <button class="remove-btn" onclick="removeBox('${boxId}')">Remove</button>
+            <div class="item-info">
+                <div class="item">${itemName}</div>
+                <ul class="prices">
+                    <li>
+                        <input type="radio" name="${boxId}-price" value="${basePrices[0]}" id="${boxId}-price1">
+                        <label for="${boxId}-price1"><span>Price 1:</span> ₹<span id="${boxId}-price1-display">${basePrices[0]}</span></label>
+                    </li>
+                    <li>
+                        <input type="radio" name="${boxId}-price" value="${basePrices[1]}" id="${boxId}-price2">
+                        <label for="${boxId}-price2"><span>Price 2:</span> ₹<span id="${boxId}-price2-display">${basePrices[1]}</span></label>
+                    </li>
+                    <li>
+                        <input type="radio" name="${boxId}-price" value="${basePrices[2]}" id="${boxId}-price3">
+                        <label for="${boxId}-price3"><span>Price 3:</span> ₹<span id="${boxId}-price3-display">${basePrices[2]}</span></label>
+                    </li>
+                    <li>
+                        <input type="radio" name="${boxId}-price" value="${basePrices[3]}" id="${boxId}-price4">
+                        <label for="${boxId}-price4"><span>Price 4:</span> ₹<span id="${boxId}-price4-display">${basePrices[3]}</span></label>
+                    </li>
+                </ul>
+                <div class="slider-container">
+                    <label for="${boxId}-quantity">Quantity:</label>
+                    <input type="range" id="${boxId}-quantity" name="${boxId}-quantity" min="1" max="100" value="1">
+                    <span id="${boxId}-quantity-value">1</span>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(box);
+
+        const quantityInput = document.getElementById(`${boxId}-quantity`);
+        const quantityValue = document.getElementById(`${boxId}-quantity-value`);
+        const priceElements = {
+            price1: document.getElementById(`${boxId}-price1-display`),
+            price2: document.getElementById(`${boxId}-price2-display`),
+            price3: document.getElementById(`${boxId}-price3-display`),
+            price4: document.getElementById(`${boxId}-price4-display`)
+        };
+
+        function updatePrices() {
+            const quantity = parseInt(quantityInput.value);
+            quantityValue.textContent = quantity;
+            basePrices.forEach((price, index) => {
+                const updatedPrice = (price * quantity).toFixed(2);
+                priceElements[`price${index + 1}`].textContent = updatedPrice;
+            });
+            calculateTotalCost();
+        }
+
+        quantityInput.addEventListener('input', updatePrices);
+
+        document.querySelectorAll(`[name="${boxId}-price"]`).forEach(radio => {
+            radio.addEventListener('change', calculateTotalCost);
+        });
+
+        updatePrices();
+    }
+
+    function removeBox(boxId) {
+        const box = document.getElementById(boxId);
+        if (box) {
+            box.remove();
+            calculateTotalCost();
+        }
+    }
+
+    function calculateTotalCost() {
+        let totalCost = 0;
+        const purchasedItemsList = document.getElementById('purchased-items-list');
+        purchasedItemsList.innerHTML = '';
+
+        document.querySelectorAll('#items-container .container').forEach(box => {
+            const selectedPrice = box.querySelector('input[type="radio"]:checked');
+            if (selectedPrice) {
+                const quantity = parseInt(box.querySelector('input[type="range"]').value);
+                const itemName = box.querySelector('.item').textContent;
+                const itemCost = parseFloat(selectedPrice.value) * quantity;
+                totalCost += itemCost;
+
+                const listItem = document.createElement('li');
+                listItem.textContent = `${itemName} - ${quantity} x ₹${parseFloat(selectedPrice.value).toFixed(2)} = ₹${itemCost.toFixed(2)}`;
+                purchasedItemsList.appendChild(listItem);
+            }
+        });
+
+        document.getElementById('total-cost').textContent = totalCost.toFixed(2);
+    }
+
+    document.getElementById('add-item').addEventListener('click', () => {
+        const itemName = document.getElementById('item-name').value.trim();
+
+        if (itemName) {
+            createBox(itemName);
+            document.getElementById('item-name').value = '';
+        } else {
+            alert('Please enter a valid item name.');
+        }
+    });
+</script>
+
+</html>
